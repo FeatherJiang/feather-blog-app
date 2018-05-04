@@ -1,7 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RefreshControl } from 'react-native';
-import { Container, Header, Content, Left, Body, Right, Icon, Text, Card, CardItem, Thumbnail, Button, Spinner, Toast, Fab } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Left,
+  Body,
+  Right,
+  Icon,
+  Text,
+  Card,
+  CardItem,
+  Thumbnail,
+  Button,
+  Spinner,
+  Toast,
+  Fab,
+} from 'native-base';
+import config from '../../config';
 import { GETED } from '../../config/statusCode';
 import API from '../../API';
 
@@ -22,24 +39,27 @@ class Comments extends React.Component {
   }
 
   componentWillMount() {
-    this.props.navigation.addListener(
-      'willFocus',
-      () => {
-        this.setState({
+    this.props.navigation.addListener('willFocus', () => {
+      this.setState(
+        {
           loading: true,
-        }, () => {
+        },
+        () => {
           this.getComments(this.props.navigation.state.params.aid);
-        });
-      },
-    );
+        },
+      );
+    });
   }
 
   onRefresh() {
-    this.setState({
-      pullLoading: true,
-    }, () => {
-      this.getComments(this.props.navigation.state.params.aid);
-    });
+    this.setState(
+      {
+        pullLoading: true,
+      },
+      () => {
+        this.getComments(this.props.navigation.state.params.aid);
+      },
+    );
   }
 
   async getComments(parameter) {
@@ -91,21 +111,29 @@ class Comments extends React.Component {
   }
 
   scrollLoading(event) {
-    const scrollHeight = event.nativeEvent.contentOffset.y +
-    event.nativeEvent.layoutMeasurement.height;
+    const scrollHeight =
+      event.nativeEvent.contentOffset.y + event.nativeEvent.layoutMeasurement.height;
     if (scrollHeight >= event.nativeEvent.contentSize.height) {
-      if ((this.state.count - (this.state.page * this.state.limit) >= 1)
-      && this.state.loading === false) {
-        this.setState(preState => ({
-          loading: true,
-          limit: (preState.page + 1) * preState.limit,
-        }), () => {
-          this.setState({
+      if (
+        this.state.count - this.state.page * this.state.limit >= 1 &&
+        this.state.loading === false
+      ) {
+        this.setState(
+          preState => ({
             loading: true,
-          }, () => {
-            this.getComments(this.props.navigation.state.params.aid);
-          });
-        });
+            limit: (preState.page + 1) * preState.limit,
+          }),
+          () => {
+            this.setState(
+              {
+                loading: true,
+              },
+              () => {
+                this.getComments(this.props.navigation.state.params.aid);
+              },
+            );
+          },
+        );
       }
     }
   }
@@ -115,7 +143,12 @@ class Comments extends React.Component {
       <Container>
         <Header>
           <Left>
-            <Button transparent onPress={() => { this.props.navigation.goBack(); }}>
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            >
               <Icon name="arrow-back" />
             </Button>
           </Left>
@@ -127,68 +160,72 @@ class Comments extends React.Component {
         <Content
           scrollEventThrottle={300}
           onScroll={this.scrollLoading}
-          refreshControl={<RefreshControl
-            refreshing={this.state.pullLoading}
-            onRefresh={this.onRefresh}
-          />}
+          refreshControl={
+            <RefreshControl refreshing={this.state.pullLoading} onRefresh={this.onRefresh} />
+          }
         >
-          {
-            this.state.comments.map(comment => (
-              <Card key={comment.cid}>
-                <CardItem>
-                  <Left>
-                    <Thumbnail small source={{ uri: `http://localhost:8080${comment.avatar}` }} />
-                    <Body>
-                      <Text>{comment.name}</Text>
-                      <Text note>{new Date(comment.createdAt).toLocaleString()}</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem>
+          {this.state.comments.map(comment => (
+            <Card key={comment.cid}>
+              <CardItem>
+                <Left>
+                  <Thumbnail small source={{ uri: config.baseURL + comment.avatar }} />
                   <Body>
-                    <Text>{comment.content}</Text>
+                    <Text>{comment.name}</Text>
+                    <Text note>{new Date(comment.createdAt).toLocaleString()}</Text>
                   </Body>
-                </CardItem>
-                <CardItem>
-                  <Left>
-                    {
-                      comment.children.length !== 0 ?
-                        <Button
-                          transparent
-                          iconLeft
-                          onPress={
-                            () => {
-                              this.props.navigation.navigate('comments', { aid: this.props.navigation.state.params.aid, pid: comment.cid, limit: this.state.limit });
-                            }
-                          }
-                        >
-                          <Text>see reply</Text>
-                        </Button> : null
-                    }
-                  </Left>
-                  <Right >
+                </Left>
+              </CardItem>
+              <CardItem>
+                <Body>
+                  <Text>{comment.content}</Text>
+                </Body>
+              </CardItem>
+              <CardItem>
+                <Left>
+                  {comment.children && comment.children.length !== 0 ? (
                     <Button
                       transparent
                       iconLeft
-                      onPress={
-                        () => {
-                          this.props.navigation.navigate('commentForm', { aid: this.props.navigation.state.params.aid, pid: comment.cid });
-                        }
-                      }
+                      onPress={() => {
+                        this.props.navigation.navigate('comments', {
+                          aid: this.props.navigation.state.params.aid,
+                          pid: comment.cid,
+                          limit: this.state.limit,
+                        });
+                      }}
                     >
-                      <Icon active name="undo" />
-                      <Text>reply</Text>
+                      <Text>see reply</Text>
                     </Button>
-                  </Right>
-                </CardItem>
-              </Card>
-              ))
-          }
-          {
-            this.state.loading ? <Spinner color="blue" /> : null
-          }
+                  ) : null}
+                </Left>
+                <Right>
+                  <Button
+                    transparent
+                    iconLeft
+                    onPress={() => {
+                      this.props.navigation.navigate('commentForm', {
+                        aid: this.props.navigation.state.params.aid,
+                        pid: comment.cid,
+                      });
+                    }}
+                  >
+                    <Icon active name="undo" />
+                    <Text>reply</Text>
+                  </Button>
+                </Right>
+              </CardItem>
+            </Card>
+          ))}
+          {this.state.loading ? <Spinner color="blue" /> : null}
         </Content>
-        <Fab onPress={() => { this.props.navigation.navigate('commentForm', { aid: this.props.navigation.state.params.aid, pid: this.props.navigation.state.params.pid }); }}>
+        <Fab
+          onPress={() => {
+            this.props.navigation.navigate('commentForm', {
+              aid: this.props.navigation.state.params.aid,
+              pid: this.props.navigation.state.params.pid,
+            });
+          }}
+        >
           <Icon active name="undo" />
         </Fab>
       </Container>

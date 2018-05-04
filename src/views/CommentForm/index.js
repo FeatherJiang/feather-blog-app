@@ -1,8 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
-import { Container, Header, Content, Left, Body, Right, Button, Text, Icon, Card, CardItem, Form, Item, Label, Input, Thumbnail, Toast, Spinner } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Left,
+  Body,
+  Right,
+  Button,
+  Text,
+  Icon,
+  Card,
+  CardItem,
+  Form,
+  Item,
+  Label,
+  Input,
+  Thumbnail,
+  Toast,
+  Spinner,
+} from 'native-base';
 import ImagePicker from 'react-native-image-picker';
+import config from '../../config';
 import { CREATED } from '../../config/statusCode';
 import API from '../../API';
 
@@ -19,7 +39,7 @@ class CommentForm extends React.Component {
   constructor() {
     super();
     this.state = {
-      avatar: '/api/v1/imgs/default/anonymous-avatar.png',
+      avatar: '/v1/imgs/default/anonymous-avatar.png',
       name: '',
       email: '',
       content: '',
@@ -127,7 +147,12 @@ class CommentForm extends React.Component {
       <Container>
         <Header>
           <Left>
-            <Button transparent onPress={() => { this.props.navigation.goBack(); }}>
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            >
               <Icon name="arrow-back" />
             </Button>
           </Left>
@@ -140,7 +165,7 @@ class CommentForm extends React.Component {
           <Card>
             <CardItem>
               <Left>
-                <Thumbnail source={{ uri: `http://localhost:8080${this.state.avatar}` }} />
+                <Thumbnail source={{ uri: config.baseURL + this.state.avatar }} />
               </Left>
               <Right>
                 <Button small onPress={this.uploadImg}>
@@ -153,11 +178,17 @@ class CommentForm extends React.Component {
                 <Form style={styles.form}>
                   <Item stackedLabel last>
                     <Label>Name</Label>
-                    <Input placeholder="Optional" onChangeText={text => this.setState({ name: text })} />
+                    <Input
+                      placeholder="Optional"
+                      onChangeText={text => this.setState({ name: text })}
+                    />
                   </Item>
                   <Item stackedLabel last>
                     <Label>Email</Label>
-                    <Input placeholder="Optional" onChangeText={text => this.setState({ email: text })} />
+                    <Input
+                      placeholder="Optional"
+                      onChangeText={text => this.setState({ email: text })}
+                    />
                   </Item>
                   <Item stackedLabel last error={this.state.commentError} style={styles.comment}>
                     <Label>Comment</Label>
@@ -181,13 +212,10 @@ class CommentForm extends React.Component {
             <CardItem footer>
               <Body>
                 <Button block disabled={this.state.loading} onPress={this.addComment}>
-                  {
-                    this.state.loading ? <Spinner color="blue" /> : <Text>Submit</Text>
-                  }
+                  {this.state.loading ? <Spinner color="blue" /> : <Text>Submit</Text>}
                 </Button>
               </Body>
             </CardItem>
-
           </Card>
         </Content>
       </Container>

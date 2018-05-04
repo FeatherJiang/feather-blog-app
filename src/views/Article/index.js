@@ -1,9 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Image } from 'react-native';
-import { Container, Content, Header, Title, Card, CardItem, Left, Body, Right, Thumbnail, Text, Button, Icon, Toast, Spinner, Footer, FooterTab } from 'native-base';
+import {
+  Container,
+  Content,
+  Header,
+  Title,
+  Card,
+  CardItem,
+  Left,
+  Body,
+  Right,
+  Thumbnail,
+  Text,
+  Button,
+  Icon,
+  Toast,
+  Spinner,
+  Footer,
+  FooterTab,
+} from 'native-base';
 import Markdown from 'react-native-simple-markdown';
 
+import config from '../../config';
 import { GETED, CREATED, DELETED } from '../../config/statusCode';
 import API from '../../API';
 import avatar from '../../assets/img/feather.jpg';
@@ -38,11 +57,14 @@ class Article extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({
-      loading: true,
-    }, () => {
-      this.getArticle(this.props.navigation.state.params.aid);
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        this.getArticle(this.props.navigation.state.params.aid);
+      },
+    );
   }
 
   async getArticle(parameter) {
@@ -137,21 +159,22 @@ class Article extends React.Component {
       <Container>
         <Header searchBar rounded>
           <Left>
-            <Button transparent onPress={() => { this.props.navigation.goBack(); }}>
+            <Button
+              transparent
+              onPress={() => {
+                this.props.navigation.goBack();
+              }}
+            >
               <Icon name="arrow-back" />
             </Button>
           </Left>
           <Body>
-            <Title>
-              {this.state.title}
-            </Title>
+            <Title>{this.state.title}</Title>
           </Body>
           <Right />
         </Header>
         <Content>
-          {
-            this.state.loading ? <Spinner color="blue" /> : null
-          }
+          {this.state.loading ? <Spinner color="blue" /> : null}
           <Card>
             <CardItem>
               <Left>
@@ -164,7 +187,7 @@ class Article extends React.Component {
             </CardItem>
             <CardItem cardBody>
               <Body>
-                <Image source={{ uri: `http://localhost:8080${this.state.banner}` }} style={styles.img} />
+                <Image source={{ uri: config.baseURL + this.state.banner }} style={styles.img} />
               </Body>
             </CardItem>
             <CardItem>
@@ -194,7 +217,15 @@ class Article extends React.Component {
               <Icon name="star" active={this.state.like} style={styles.icon} />
               <Text style={styles.icon}>Star</Text>
             </Button>
-            <Button onPress={() => { this.props.navigation.navigate('comments', { aid: this.state.aid, pid: 0, limit: 10 }); }}>
+            <Button
+              onPress={() => {
+                this.props.navigation.navigate('comments', {
+                  aid: this.state.aid,
+                  pid: 0,
+                  limit: 10,
+                });
+              }}
+            >
               <Icon name="chatboxes" style={styles.icon} />
               <Text style={styles.icon}>Comments</Text>
             </Button>

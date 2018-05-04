@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSheet, Image } from 'react-native';
 import { Icon, Button, Text, Card, CardItem, Left, Thumbnail, Body } from 'native-base';
 import avatar from '../../assets/img/feather.jpg';
+import config from '../../config';
 
 const styles = StyleSheet.create({
   img: {
@@ -26,7 +27,7 @@ function ArticleOverview(props) {
       </CardItem>
       <CardItem button cardBody onPress={() => { props.navigation.navigate('article', { aid: props.data.aid }); }}>
         <Body>
-          <Image source={{ uri: `http://localhost:8080${props.data.banner}` }} style={styles.img} />
+          <Image source={{ uri: config.baseURL + props.data.banner }} style={styles.img} />
         </Body>
       </CardItem>
       <CardItem>
