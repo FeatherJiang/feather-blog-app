@@ -14,7 +14,7 @@ import {
   Spinner,
   Toast,
 } from 'native-base';
-import Markdown from 'react-native-simple-markdown';
+import Markdown from 'react-native-markdown-renderer';
 import avatar from '../../assets/img/feather.jpg';
 import background from '../../assets/img/BlackBackground.jpg';
 import { GETED } from '../../config/statusCode';

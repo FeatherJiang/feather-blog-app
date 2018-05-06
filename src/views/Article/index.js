@@ -20,7 +20,7 @@ import {
   Footer,
   FooterTab,
 } from 'native-base';
-import Markdown from 'react-native-simple-markdown';
+import Markdown from 'react-native-markdown-renderer';
 
 import config from '../../config';
 import { GETED, CREATED, DELETED } from '../../config/statusCode';
@@ -174,42 +174,45 @@ class Article extends React.Component {
           <Right />
         </Header>
         <Content>
-          {this.state.loading ? <Spinner color="blue" /> : null}
-          <Card>
-            <CardItem>
-              <Left>
-                <Thumbnail small source={avatar} />
+          {this.state.loading ? (
+            <Spinner color="blue" />
+          ) : (
+            <Card>
+              <CardItem>
+                <Left>
+                  <Thumbnail small source={avatar} />
+                  <Body>
+                    <Text>{this.state.title}</Text>
+                    <Text note>{new Date(this.state.createdAt).toLocaleString()}</Text>
+                  </Body>
+                </Left>
+              </CardItem>
+              <CardItem cardBody>
                 <Body>
-                  <Text>{this.state.title}</Text>
-                  <Text note>{new Date(this.state.createdAt).toLocaleString()}</Text>
+                  <Image source={{ uri: config.baseURL + this.state.banner }} style={styles.img} />
                 </Body>
-              </Left>
-            </CardItem>
-            <CardItem cardBody>
-              <Body>
-                <Image source={{ uri: config.baseURL + this.state.banner }} style={styles.img} />
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Markdown>{this.state.content}</Markdown>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Button transparent iconLeft>
-                <Icon active name="star" />
-                <Text>{this.state.starNum}</Text>
-              </Button>
-              <Button transparent iconLeft>
-                <Icon active name="eye" />
-                <Text>{this.state.watchNum}</Text>
-              </Button>
-              <Button transparent iconLeft>
-                <Icon active name="chatbubbles" />
-                <Text>{this.state.commentsNum}</Text>
-              </Button>
-            </CardItem>
-          </Card>
+              </CardItem>
+              <CardItem>
+                <Body>
+                  <Markdown>{this.state.content}</Markdown>
+                </Body>
+              </CardItem>
+              <CardItem>
+                <Button transparent iconLeft>
+                  <Icon active name="star" />
+                  <Text>{this.state.starNum}</Text>
+                </Button>
+                <Button transparent iconLeft>
+                  <Icon active name="eye" />
+                  <Text>{this.state.watchNum}</Text>
+                </Button>
+                <Button transparent iconLeft>
+                  <Icon active name="chatbubbles" />
+                  <Text>{this.state.commentsNum}</Text>
+                </Button>
+              </CardItem>
+            </Card>
+          )}
         </Content>
         <Footer>
           <FooterTab>
