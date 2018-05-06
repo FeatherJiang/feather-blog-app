@@ -1,6 +1,19 @@
 import React from 'react';
 import { StyleSheet, Image, RefreshControl } from 'react-native';
-import { Container, Header, Content, Body, Card, CardItem, Thumbnail, Left, Text, Spinner, Toast } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Body,
+  Title,
+  Card,
+  CardItem,
+  Thumbnail,
+  Left,
+  Text,
+  Spinner,
+  Toast,
+} from 'native-base';
 import Markdown from 'react-native-simple-markdown';
 import avatar from '../../assets/img/feather.jpg';
 import background from '../../assets/img/BlackBackground.jpg';
@@ -28,19 +41,25 @@ export default class About extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({
-      loading: true,
-    }, () => {
-      this.getUser();
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        this.getUser();
+      },
+    );
   }
 
   onRefresh() {
-    this.setState({
-      pullLoading: true,
-    }, () => {
-      this.getUser();
-    });
+    this.setState(
+      {
+        pullLoading: true,
+      },
+      () => {
+        this.getUser();
+      },
+    );
   }
 
   async getUser() {
@@ -74,14 +93,13 @@ export default class About extends React.Component {
       <Container>
         <Header>
           <Body>
-            <Text>About Me</Text>
+            <Title>About Me</Title>
           </Body>
         </Header>
         <Content
-          refreshControl={<RefreshControl
-            refreshing={this.state.pullLoading}
-            onRefresh={this.onRefresh}
-          />}
+          refreshControl={
+            <RefreshControl refreshing={this.state.pullLoading} onRefresh={this.onRefresh} />
+          }
         >
           <Card>
             <CardItem>
@@ -100,9 +118,7 @@ export default class About extends React.Component {
             </CardItem>
             <CardItem>
               <Body>
-                {
-                  this.state.loading ? <Spinner color="blue" /> : null
-                }
+                {this.state.loading ? <Spinner color="blue" /> : null}
                 <Markdown>{this.state.introduce}</Markdown>
               </Body>
             </CardItem>

@@ -6,19 +6,22 @@ import ArticleList from '../../components/ArticleList';
 function Page(props) {
   return (
     <Container>
-      <Header searchBar rounded>
+      <Header>
         <Left>
-          <Button transparent onPress={() => { props.navigation.goBack(); }}>
+          <Button
+            transparent
+            onPress={() => {
+              props.navigation.goBack();
+            }}
+          >
             <Icon name="arrow-back" />
           </Button>
         </Left>
         <Body>
           <Title>
-            {
-              props.navigation.state.params.tag
-              || props.navigation.state.params.date
-              || props.navigation.state.params.key
-            }
+            {props.navigation.state.params.tag ||
+              props.navigation.state.params.date ||
+              props.navigation.state.params.key}
           </Title>
         </Body>
         <Right />

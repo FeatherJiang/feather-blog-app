@@ -1,7 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RefreshControl } from 'react-native';
-import { Container, Header, Body, Title, Content, Card, CardItem, Icon, Left, Right, Text, Spinner, Toast, Badge } from 'native-base';
+import {
+  Container,
+  Header,
+  Body,
+  Title,
+  Content,
+  Card,
+  CardItem,
+  Icon,
+  Left,
+  Right,
+  Text,
+  Spinner,
+  Toast,
+  Badge,
+} from 'native-base';
 import { GETED } from '../../config/statusCode';
 import API from '../../API';
 
@@ -16,19 +31,25 @@ class Tags extends React.Component {
     this.onRefresh = this.onRefresh.bind(this);
   }
   componentWillMount() {
-    this.setState({
-      loading: true,
-    }, () => {
-      this.getTags();
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        this.getTags();
+      },
+    );
   }
 
   onRefresh() {
-    this.setState({
-      pullLoading: true,
-    }, () => {
-      this.getTags();
-    });
+    this.setState(
+      {
+        pullLoading: true,
+      },
+      () => {
+        this.getTags();
+      },
+    );
   }
 
   async getTags() {
@@ -59,44 +80,43 @@ class Tags extends React.Component {
   render() {
     return (
       <Container>
-        <Header searchBar rounded>
+        <Header>
           <Body>
             <Title>Tags</Title>
           </Body>
         </Header>
         <Content
-          refreshControl={<RefreshControl
-            refreshing={this.state.pullLoading}
-            onRefresh={this.onRefresh}
-          />}
+          refreshControl={
+            <RefreshControl refreshing={this.state.pullLoading} onRefresh={this.onRefresh} />
+          }
         >
           <Card>
-            {
-            this.state.loading ? <Spinner color="blue" /> : null
-            }
-            {
-              this.state.tags.map(tag => (
-                <CardItem key={tag.tid} bordered button onPress={() => this.props.navigation.navigate('page', { tag: tag.name })}>
-                  <Left>
-                    <Icon active name="pricetag" />
-                    <Text>{tag.name}</Text>
-                  </Left>
-                  <Right>
-                    <Badge primary>
-                      <Text>{tag.articleCount}</Text>
-                    </Badge>
-                  </Right>
-                </CardItem>
-              ))
-            }
-            {
-              this.state.tags.length === 0 && !this.state.loading ?
-                <CardItem>
-                  <Body>
-                    <Text>no more</Text>
-                  </Body>
-                </CardItem> : null
-            }
+            {this.state.loading ? <Spinner color="blue" /> : null}
+            {this.state.tags.map(tag => (
+              <CardItem
+                key={tag.tid}
+                bordered
+                button
+                onPress={() => this.props.navigation.navigate('page', { tag: tag.name })}
+              >
+                <Left>
+                  <Icon active name="pricetag" />
+                  <Text>{tag.name}</Text>
+                </Left>
+                <Right>
+                  <Badge primary>
+                    <Text>{tag.articleCount}</Text>
+                  </Badge>
+                </Right>
+              </CardItem>
+            ))}
+            {this.state.tags.length === 0 && !this.state.loading ? (
+              <CardItem>
+                <Body>
+                  <Text>no more</Text>
+                </Body>
+              </CardItem>
+            ) : null}
           </Card>
         </Content>
       </Container>

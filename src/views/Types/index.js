@@ -37,19 +37,17 @@ class Types extends React.Component {
   render() {
     return (
       <Container>
-        <Header searchBar rounded>
+        <Header>
           <Body>
             <Title>Types</Title>
           </Body>
         </Header>
         <Tabs renderTabBar={() => <ScrollableTab />}>
-          {
-            this.state.types.map(type => (
-              <Tab key={type.tid} heading={type.name}>
-                <ArticleList params={{ type: type.name }} navigation={this.props.navigation} />
-              </Tab>
-            ))
-          }
+          {this.state.types.map(type => (
+            <Tab key={type.tid} heading={type.name}>
+              <ArticleList params={{ type: type.name }} navigation={this.props.navigation} />
+            </Tab>
+          ))}
         </Tabs>
       </Container>
     );
