@@ -7,6 +7,7 @@ import {
   Content,
   Left,
   Body,
+  Title,
   Right,
   Button,
   Text,
@@ -95,7 +96,7 @@ class CommentForm extends React.Component {
       });
       if (result.statusCode === CREATED) {
         this.setState({
-          avatar: result.data[0].url,
+          avatar: config.baseURL + result.data[0].url,
         });
       }
     } catch (error) {
@@ -118,7 +119,7 @@ class CommentForm extends React.Component {
     }
     const json = {
       pid: this.props.navigation.state.params.pid,
-      avatar: this.state.avatar,
+      avatar: this.state.avatar.replace(config.baseURL, ''),
       name: this.state.name || 'anonymous',
       email: this.state.email,
       content: this.state.content,
@@ -157,7 +158,7 @@ class CommentForm extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Text>Reply</Text>
+            <Title>Reply</Title>
           </Body>
           <Right />
         </Header>

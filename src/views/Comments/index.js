@@ -7,6 +7,7 @@ import {
   Content,
   Left,
   Body,
+  Title,
   Right,
   Icon,
   Text,
@@ -153,7 +154,7 @@ class Comments extends React.Component {
             </Button>
           </Left>
           <Body>
-            <Text>Comments</Text>
+            <Title>Comments</Title>
           </Body>
           <Right />
         </Header>
