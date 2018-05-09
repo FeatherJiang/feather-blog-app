@@ -1,7 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { RefreshControl } from 'react-native';
-import { Container, Header, Content, Item, Input, Icon, Button, Text, Spinner, Toast, Card, CardItem, Body } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Item,
+  Input,
+  Icon,
+  Button,
+  Text,
+  Spinner,
+  Toast,
+  Card,
+  CardItem,
+  Body,
+} from 'native-base';
 import ArticleOverview from '../../components/ArticleOverview';
 import { GETED } from '../../config/statusCode';
 import API from '../../API';
@@ -25,19 +39,25 @@ class Home extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({
-      loading: true,
-    }, () => {
-      this.getArticles();
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        this.getArticles();
+      },
+    );
   }
 
   onRefresh() {
-    this.setState({
-      pullLoading: true,
-    }, () => {
-      this.getArticles();
-    });
+    this.setState(
+      {
+        pullLoading: true,
+      },
+      () => {
+        this.getArticles();
+      },
+    );
   }
 
   async getArticles() {
@@ -65,7 +85,7 @@ class Home extends React.Component {
         pullLoading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -73,17 +93,22 @@ class Home extends React.Component {
   }
 
   scrollLoading(event) {
-    const scrollHeight = event.nativeEvent.contentOffset.y +
-    event.nativeEvent.layoutMeasurement.height;
+    const scrollHeight =
+      event.nativeEvent.contentOffset.y + event.nativeEvent.layoutMeasurement.height;
     if (scrollHeight >= event.nativeEvent.contentSize.height) {
-      if ((this.state.count - (this.state.page * this.state.limit) >= 1)
-      && this.state.loading === false) {
-        this.setState(preState => ({
-          loading: true,
-          limit: (preState.page + 1) * preState.limit,
-        }), () => {
-          this.getArticles();
-        });
+      if (
+        this.state.count - this.state.page * this.state.limit >= 1 &&
+        this.state.loading === false
+      ) {
+        this.setState(
+          preState => ({
+            loading: true,
+            limit: (preState.page + 1) * preState.limit,
+          }),
+          () => {
+            this.getArticles();
+          },
+        );
       }
     }
   }
@@ -106,7 +131,13 @@ class Home extends React.Component {
         <Header searchBar rounded>
           <Item>
             <Icon name="search" />
-            <Input placeholder="Search" onChangeText={(text) => { this.setState({ key: text }); }} />
+            <Input
+              placeholder="Search"
+              onChangeText={(text) => {
+                this.setState({ key: text });
+              }}
+              onSubmitEditing={this.searchHandle}
+            />
           </Item>
           <Button transparent onPress={this.searchHandle}>
             <Text>Search</Text>
@@ -115,33 +146,23 @@ class Home extends React.Component {
         <Content
           scrollEventThrottle={300}
           onScroll={this.scrollLoading}
-          refreshControl={<RefreshControl
-            refreshing={this.state.pullLoading}
-            onRefresh={this.onRefresh}
-          />}
+          refreshControl={
+            <RefreshControl refreshing={this.state.pullLoading} onRefresh={this.onRefresh} />
+          }
         >
-          {
-            this.state.articles.map(article => (
-              <ArticleOverview
-                key={article.aid}
-                data={article}
-                navigation={this.props.navigation}
-              />
-            ))
-          }
-          {
-            this.state.loading ? <Spinner color="blue" /> : null
-          }
-          {
-            this.state.articles.length === 0 && !this.state.loading ?
-              <Card>
-                <CardItem>
-                  <Body>
-                    <Text>no more</Text>
-                  </Body>
-                </CardItem>
-              </Card> : null
-          }
+          {this.state.articles.map(article => (
+            <ArticleOverview key={article.aid} data={article} navigation={this.props.navigation} />
+          ))}
+          {this.state.loading ? <Spinner color="blue" /> : null}
+          {this.state.articles.length === 0 && !this.state.loading ? (
+            <Card>
+              <CardItem>
+                <Body>
+                  <Text>no more</Text>
+                </Body>
+              </CardItem>
+            </Card>
+          ) : null}
         </Content>
       </Container>
     );

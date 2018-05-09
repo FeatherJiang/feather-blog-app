@@ -24,19 +24,25 @@ class ArticleList extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({
-      loading: true,
-    }, () => {
-      this.getArticlesData();
-    });
+    this.setState(
+      {
+        loading: true,
+      },
+      () => {
+        this.getArticlesData();
+      },
+    );
   }
 
   onRefresh() {
-    this.setState({
-      pullLoading: true,
-    }, () => {
-      this.getArticlesData();
-    });
+    this.setState(
+      {
+        pullLoading: true,
+      },
+      () => {
+        this.getArticlesData();
+      },
+    );
   }
 
   getArticlesData() {
@@ -80,7 +86,7 @@ class ArticleList extends React.Component {
         pullLoading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -112,7 +118,7 @@ class ArticleList extends React.Component {
         pullLoading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -144,7 +150,7 @@ class ArticleList extends React.Component {
         pullLoading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -176,7 +182,7 @@ class ArticleList extends React.Component {
         pullLoading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -184,17 +190,22 @@ class ArticleList extends React.Component {
   }
 
   scrollLoading(event) {
-    const scrollHeight = event.nativeEvent.contentOffset.y +
-    event.nativeEvent.layoutMeasurement.height;
+    const scrollHeight =
+      event.nativeEvent.contentOffset.y + event.nativeEvent.layoutMeasurement.height;
     if (scrollHeight >= event.nativeEvent.contentSize.height) {
-      if ((this.state.count - (this.state.page * this.state.limit) >= 1)
-      && this.state.loading === false) {
-        this.setState(preState => ({
-          loading: true,
-          limit: (preState.page + 1) * preState.limit,
-        }), () => {
-          this.getArticlesData();
-        });
+      if (
+        this.state.count - this.state.page * this.state.limit >= 1 &&
+        this.state.loading === false
+      ) {
+        this.setState(
+          preState => ({
+            loading: true,
+            limit: (preState.page + 1) * preState.limit,
+          }),
+          () => {
+            this.getArticlesData();
+          },
+        );
       }
     }
   }
@@ -204,29 +215,23 @@ class ArticleList extends React.Component {
       <Content
         scrollEventThrottle={300}
         onScroll={this.scrollLoading}
-        refreshControl={<RefreshControl
-          refreshing={this.state.pullLoading}
-          onRefresh={this.onRefresh}
-        />}
+        refreshControl={
+          <RefreshControl refreshing={this.state.pullLoading} onRefresh={this.onRefresh} />
+        }
       >
-        {
-          this.state.articles.map(article => (
-            <ArticleOverview key={article.aid} data={article} navigation={this.props.navigation} />
-          ))
-        }
-        {
-          this.state.loading ? <Spinner color="blue" /> : null
-        }
-        {
-          this.state.articles.length === 0 && !this.state.loading ?
-            <Card>
-              <CardItem>
-                <Body>
-                  <Text>no more</Text>
-                </Body>
-              </CardItem>
-            </Card> : null
-        }
+        {this.state.articles.map(article => (
+          <ArticleOverview key={article.aid} data={article} navigation={this.props.navigation} />
+        ))}
+        {this.state.loading ? <Spinner color="blue" /> : null}
+        {this.state.articles.length === 0 && !this.state.loading ? (
+          <Card>
+            <CardItem>
+              <Body>
+                <Text>no more</Text>
+              </Body>
+            </CardItem>
+          </Card>
+        ) : null}
       </Content>
     );
   }

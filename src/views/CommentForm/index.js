@@ -46,6 +46,7 @@ class CommentForm extends React.Component {
       content: '',
       commentError: false,
       loading: false,
+      avatarLoading: false,
     };
     this.uploadImg = this.uploadImg.bind(this);
     this.addComment = this.addComment.bind(this);
@@ -59,13 +60,7 @@ class CommentForm extends React.Component {
       },
     };
     ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel) {
-        Toast.show({
-          text: response.didCancel,
-          position: 'bottom',
-          duration: 3000,
-        });
-      } else if (response.error) {
+      if (response.error) {
         Toast.show({
           text: response.error,
           position: 'bottom',
@@ -85,6 +80,7 @@ class CommentForm extends React.Component {
   }
 
   async addAvatar(file) {
+    this.setState({ avatarLoading: true });
     try {
       const data = new FormData();
       data.append('file', file);
@@ -96,12 +92,19 @@ class CommentForm extends React.Component {
       });
       if (result.statusCode === CREATED) {
         this.setState({
-          avatar: config.baseURL + result.data[0].url,
+          avatar: result.data[0].url,
+        });
+        Toast.show({
+          text: 'upload success',
+          position: 'bottom',
+          duration: 3000,
         });
       }
+      this.setState({ avatarLoading: false });
     } catch (error) {
+      this.setState({ avatarLoading: false });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -115,11 +118,16 @@ class CommentForm extends React.Component {
         commentError: false,
         loading: false,
       });
+      Toast.show({
+        text: 'please input comment!',
+        position: 'bottom',
+        duration: 3000,
+      });
       return;
     }
     const json = {
       pid: this.props.navigation.state.params.pid,
-      avatar: this.state.avatar.replace(config.baseURL, ''),
+      avatar: this.state.avatar,
       name: this.state.name || 'anonymous',
       email: this.state.email,
       content: this.state.content,
@@ -136,7 +144,7 @@ class CommentForm extends React.Component {
     } catch (error) {
       this.setState({ loading: false });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -169,8 +177,8 @@ class CommentForm extends React.Component {
                 <Thumbnail source={{ uri: config.baseURL + this.state.avatar }} />
               </Left>
               <Right>
-                <Button small onPress={this.uploadImg}>
-                  <Text>Change Avatar</Text>
+                <Button block disabled={this.state.avatarLoading} onPress={this.uploadImg}>
+                  {this.state.avatarLoading ? <Spinner color="blue" /> : <Text>Change Avatar</Text>}
                 </Button>
               </Right>
             </CardItem>

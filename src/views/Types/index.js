@@ -27,7 +27,7 @@ class Types extends React.Component {
       }
     } catch (error) {
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });

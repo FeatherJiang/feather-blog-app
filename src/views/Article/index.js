@@ -93,7 +93,7 @@ class Article extends React.Component {
         loading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
@@ -124,7 +124,7 @@ class Article extends React.Component {
       }
     } catch (error) {
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 2000,
       });
@@ -147,7 +147,7 @@ class Article extends React.Component {
       }
     } catch (error) {
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });

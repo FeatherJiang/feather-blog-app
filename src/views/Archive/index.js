@@ -70,7 +70,7 @@ class Archive extends React.Component {
         pullLoading: false,
       });
       Toast.show({
-        text: error.error,
+        text: error.message,
         position: 'bottom',
         duration: 3000,
       });
